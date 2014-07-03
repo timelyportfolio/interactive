@@ -33,9 +33,6 @@
 <script src="libraries/widgets/nvd3/js/d3.v3.min.js"></script>
 <script src="libraries/widgets/nvd3/js/nv.d3.min-new.js"></script>
 <script src="libraries/widgets/nvd3/js/fisheye.js"></script>
-<script src="libraries/widgets/highcharts/js/jquery-1.9.1.min.js"></script>
-<script src="libraries/widgets/highcharts/js/highcharts.js"></script>
-<script src="libraries/widgets/highcharts/js/highcharts-more.js"></script>
 
 
 </head>
@@ -316,7 +313,7 @@ print(M1, tag = &#39;chart&#39;)</textarea></p>
     <script>
 $(document).ready(function(){
      $(".draggable").draggable();
-    });
+});
 </script>
 
 <div class="row-fluid">
@@ -355,8 +352,7 @@ a$chart(type = &quot;spline&quot;)
 a$series(data = c(1, 3, 2, 4, 5, 4, 6, 2, 3, 5, NA), dashStyle = &quot;longdash&quot;)
 a$series(data = c(NA, 4, 1, 3, 4, 2, 9, 1, 2, 3, 4), dashStyle = &quot;shortdot&quot;)
 a$legend(symbolWidth = 80)
-a$print(&#39;chart3&#39;)
-</textarea></p>
+a$print(&#39;chart3&#39;)</textarea></p>
 
       <div id='aceeditor5' style="height:px;"></div>
       <div class='interactive btn-toolbar pull-left'>
@@ -400,8 +396,7 @@ a$print(&#39;chart3&#39;)
     <form id="knitForm6" data-cell="6">
       <p><textarea class='interactive' id='interactive6' data-cell='6' data-results='markup' style='display:none'>require(xtable)
 options(xtable.type = &#39;html&#39;)
-xtable(head(mtcars))
-</textarea></p>
+xtable(head(mtcars))</textarea></p>
 
       <div id='aceeditor6' style="height:px;"></div>
       <div class='interactive btn-toolbar pull-left'>

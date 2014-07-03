@@ -8,7 +8,7 @@ highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : solarized_light      # 
 widgets     : [bootstrap, quiz, shiny, interactive]          
 mode        : selfcontained # {standalone, draft}
-ext_widgets : {rCharts: [libraries/nvd3, libraries/highcharts]}
+ext_widgets : {rCharts: [libraries/nvd3]}
 github      : {user: slidify, repo: idocs}
 --- &radio
 
