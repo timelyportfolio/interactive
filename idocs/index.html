@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/solarized_light.css" />
   <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->  <link rel=stylesheet href="libraries/widgets/bootstrap/css/bootstrap.css"></link>
 <link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+<link rel=stylesheet href="libraries/widgets/shiny/css/jquery-ui.css"></link>
 <link rel=stylesheet href="libraries/widgets/interactive/css/aceeditor.css"></link>
 <link rel=stylesheet href="libraries/widgets/nvd3/css/nv.d3.css"></link>
 <link rel=stylesheet href="libraries/widgets/nvd3/css/rNVD3.css"></link>
@@ -95,7 +96,7 @@
     <h2>Interactive Chart</h2>
   </hgroup>
   <article data-timings="">
-    <div id='chart1' class='rChart nvd3'></div>
+    <div id = 'chart1' class = 'rChart nvd3'></div>
 
 <script type='text/javascript'>
  $(document).ready(function(){
@@ -117,112 +118,127 @@
  "Hair": "Black",
 "Eye": "Brown",
 "Sex": "Male",
-"Freq":     32 
+"Freq":             32 
 },
 {
  "Hair": "Brown",
 "Eye": "Brown",
 "Sex": "Male",
-"Freq":     53 
+"Freq":             53 
 },
 {
  "Hair": "Red",
 "Eye": "Brown",
 "Sex": "Male",
-"Freq":     10 
+"Freq":             10 
 },
 {
  "Hair": "Blond",
 "Eye": "Brown",
 "Sex": "Male",
-"Freq":      3 
+"Freq":              3 
 },
 {
  "Hair": "Black",
 "Eye": "Blue",
 "Sex": "Male",
-"Freq":     11 
+"Freq":             11 
 },
 {
  "Hair": "Brown",
 "Eye": "Blue",
 "Sex": "Male",
-"Freq":     50 
+"Freq":             50 
 },
 {
  "Hair": "Red",
 "Eye": "Blue",
 "Sex": "Male",
-"Freq":     10 
+"Freq":             10 
 },
 {
  "Hair": "Blond",
 "Eye": "Blue",
 "Sex": "Male",
-"Freq":     30 
+"Freq":             30 
 },
 {
  "Hair": "Black",
 "Eye": "Hazel",
 "Sex": "Male",
-"Freq":     10 
+"Freq":             10 
 },
 {
  "Hair": "Brown",
 "Eye": "Hazel",
 "Sex": "Male",
-"Freq":     25 
+"Freq":             25 
 },
 {
  "Hair": "Red",
 "Eye": "Hazel",
 "Sex": "Male",
-"Freq":      7 
+"Freq":              7 
 },
 {
  "Hair": "Blond",
 "Eye": "Hazel",
 "Sex": "Male",
-"Freq":      5 
+"Freq":              5 
 },
 {
  "Hair": "Black",
 "Eye": "Green",
 "Sex": "Male",
-"Freq":      3 
+"Freq":              3 
 },
 {
  "Hair": "Brown",
 "Eye": "Green",
 "Sex": "Male",
-"Freq":     15 
+"Freq":             15 
 },
 {
  "Hair": "Red",
 "Eye": "Green",
 "Sex": "Male",
-"Freq":      7 
+"Freq":              7 
 },
 {
  "Hair": "Blond",
 "Eye": "Green",
 "Sex": "Male",
-"Freq":      8 
+"Freq":              8 
 } 
 ]
   
-      var data = d3.nest()
-        .key(function(d){
-          return opts.group === undefined ? 'main' : d[opts.group]
+      if(!(opts.type==="pieChart" || opts.type==="sparklinePlus" || opts.type==="bulletChart")) {
+        var data = d3.nest()
+          .key(function(d){
+            //return opts.group === undefined ? 'main' : d[opts.group]
+            //instead of main would think a better default is opts.x
+            return opts.group === undefined ? opts.y : d[opts.group];
+          })
+          .entries(data);
+      }
+      
+      if (opts.disabled != undefined){
+        data.map(function(d, i){
+          d.disabled = opts.disabled[i]
         })
-        .entries(data)
+      }
       
       nv.addGraph(function() {
         var chart = nv.models[opts.type]()
-          .x(function(d) { return d[opts.x] })
-          .y(function(d) { return d[opts.y] })
           .width(opts.width)
           .height(opts.height)
+          
+        if (opts.type != "bulletChart"){
+          chart
+            .x(function(d) { return d[opts.x] })
+            .y(function(d) { return d[opts.y] })
+        }
+          
          
         
           
@@ -259,8 +275,7 @@
     <form id="knitForm3" data-cell="3">
       <p><textarea class='interactive' id='interactive3' data-cell='3' data-results='asis' style='display:none'>require(googleVis)
 M1 &lt;- gvisMotionChart(Fruits, idvar = &#39;Fruit&#39;, timevar = &#39;Year&#39;)
-print(M1, tag = &#39;chart&#39;)
-</textarea></p>
+print(M1, tag = &#39;chart&#39;)</textarea></p>
 
       <div id='aceeditor3' style="height:px;"></div>
       <div class='interactive btn-toolbar pull-left'>
@@ -298,21 +313,24 @@ print(M1, tag = &#39;chart&#39;)
     <h2>Interactive Chart with Shiny Controls</h2>
   </hgroup>
   <article data-timings="">
-    <div class="row-fluid">
-  <div class="span4">
-    <form class="well">
-      <label class="control-label" for="sex">Choose Sex</label>
-      <select id="sex">
-        <option value="Male" selected="selected">Male</option>
-        <option value="Female">Female</option>
-      </select>
-      <label class="control-label" for="type">Choose Type</label>
-      <select id="type">
-        <option value="multiBarChart" selected="selected">multiBarChart</option>
-        <option value="multiBarHorizontalChart">multiBarHorizontalChart</option>
-      </select>
-    </form>
+    <script>
+$(document).ready(function(){
+     $(".draggable").draggable();
+    });
+</script>
+
+<div class="row-fluid">
+  <div class="modal draggable" id="controls" style="top:60px;left:auto;right:20px;bottom:auto;width:330px;height:auto;position:fixed;cursor:move;">
+    <label class="control-label" for="sex">Choose Sex</label>
+    <select id="sex"><option value="Male" selected>Male</option>
+<option value="Female">Female</option></select>
+    <script type="application/json" data-for="sex" data-nonempty="">{}</script>
+    <label class="control-label" for="type">Choose Type</label>
+    <select id="type"><option value="multiBarChart" selected>multiBarChart</option>
+<option value="multiBarHorizontalChart">multiBarHorizontalChart</option></select>
+    <script type="application/json" data-for="type" data-nonempty="">{}</script>
   </div>
+  <script>$(".draggable").draggable();</script>
   <div class="span8">
     <div id="nvd3plot" class="shiny-html-output nvd3 rChart"></div>
   </div>
@@ -470,6 +488,7 @@ xtable(head(mtcars))
 <script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
 <script src="libraries/widgets/quiz/js/mustache.min.js"></script>
 <script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+<script src="libraries/widgets/shiny/js/jquery-ui.js"></script>
 <script src="libraries/widgets/interactive/js/ace/js/ace.js"></script>
 <script src="libraries/widgets/interactive/js/interactive.js"></script>
 

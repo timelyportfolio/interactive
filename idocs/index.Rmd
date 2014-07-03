@@ -55,10 +55,15 @@ print(M1, tag = 'chart')
 ---
 
 ## Interactive Chart with Shiny Controls
+<script>
+$(document).ready(function(){
+     $(".draggable").draggable();
+});
+</script>
 
 ```{r opts.label = 'shiny'}
 slidifyUI(
-  sidebarPanel(
+  absolutePanel(id = "controls", class = "modal", fixed = TRUE, draggable = TRUE,  top = 60, left = "auto", right = 20, bottom = "auto",  width = 330, height = "auto",
     selectInput('sex', 'Choose Sex', c('Male', 'Female')),
     selectInput('type', 'Choose Type',
       c('multiBarChart', 'multiBarHorizontalChart')
